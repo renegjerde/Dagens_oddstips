@@ -1,0 +1,8 @@
+{
+  "name": "oddstips-mvp",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "start": "node --env-file-if-exists=.env server.js" },
+  "engines": { "node": ">=20.6.0" }
+}
