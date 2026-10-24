@@ -1,28 +1,39 @@
-# Dagens oddstips — MVP 0.1
+# Dagens oddstips — MVP 0.2
 
-Fresh-start prototype. No previous project code has been reused.
+Dette er en ny, separat prototype. Den gjenbruker ikke kode fra det tidligere oddstipsprosjektet.
 
-## What works
-- Imports a CSV containing upcoming football matches, Norsk Tipping 1X2 decimal odds, and home/away goals-for/goals-against averages.
-- Estimates home/draw/away probabilities with a deliberately simple independent Poisson goals model.
-- Calculates estimated expected value (`probability × decimal odds − 1`), ranks matches, and exports analysis as CSV.
-- Includes clearly labeled fictional demo data to test the interface.
+## Nytt i v0.2
+- Tilkobling til en tredjeparts Parse-integrasjon som oppgir Norsk Tipping fotball 1X2-prematchodds.
+- Henting av turneringsoversikt og odds fra valgt turnering.
+- Tilkobling til football-data.org for historiske, fullførte kamper innen valgt konkurranse/periode.
+- Enkel lagstatistikkbasert Poisson-baseline og forventet verdi (EV).
+- CSV-eksport og tydelig oppdiktet demo-modus.
+- API-nøkler lagres ikke; de finnes kun i sidens minne mens siden er åpen.
 
-## CSV format
-Required headers (comma-separated):
+## Slik kjører du
+Åpne `index.html` i en moderne nettleser. Bruk HTTPS eller en lokal webserver hvis nettleseren/API-et krever det.
 
-`date,league,home,away,odds_home,odds_draw,odds_away,home_gf,home_ga,away_gf,away_ga`
+## Datakilder
+- Odds: Parse-integrasjon dokumentert på https://parse.bot/marketplace/7caef9ed-2972-47a8-bc1c-571e0efd9bc2/norsk-tipping-no-api
+  - Dette er IKKE Norsk Tippings offisielle API.
+  - Krever egen Parse API-nøkkel i `X-API-Key`.
+  - Dokumentert som forhåndsodds, 1X2. Sjekk dekning, kostnad, vilkår og responsformat før du stoler på det.
+- Statistikk: https://www.football-data.org/
+  - Krever egen token i `X-Auth-Token`.
+  - Gratisnivået har begrenset konkurransedekning og begrensninger.
+  - Vis attribusjonen «Data provided by football-data.org» hvis data brukes.
 
-- `odds_home`, `odds_draw`, `odds_away`: current decimal 1X2 odds.
-- `home_gf`, `home_ga`: home team's average goals scored/conceded per home match.
-- `away_gf`, `away_ga`: away team's average goals scored/conceded per away match.
-- Dates/league names are labels; this prototype does not validate event identity or kickoff time.
+## Viktige begrensninger
+- Nettleserens `fetch` kan bli blokkert av CORS eller leverandørens tilgangsregler. Dette er synliggjort som en tilkoblingsfeil; ingen omgåelse forsøkes.
+- Ikke legg hemmelige API-nøkler inn på en offentlig publisert side. En produksjonsversjon bør ha en liten backend/proxy som beskytter nøkler og håndterer caching.
+- Odds-integrasjonen og statistikk-API bruker forskjellige konkurransenavn og lagnavn. Automatisk lagmatching er omtrentlig. Denne prototypen analyserer bare kamper hvor begge lag matcher statistikk fra den valgte konkurransen.
+- Statskilden kan ikke nødvendigvis dekke alle turneringer som oddsleverandøren tilbyr. Velg en relevant konkurranse i statistikkdelen.
+- Poisson-modellen er en grov baseline og er ikke dokumentert lønnsom. Ingen innsats plasseres. Ingen tips bør behandles som sikre.
+- Demo-kamper og demo-historikk er oppdiktet og må aldri forveksles med reelle odds.
 
-## Run
-Open `index.html` in a modern browser. It is a static app; no install, server, account or API key required for this CSV-based MVP.
-
-## Known limitations / next steps
-- No live API integration yet. Research has not confirmed a public, official Norsk Tipping developer API for Oddsen. A third-party wrapper is advertised but must be tested for uptime, terms, coverage, freshness, and cost before adoption.
-- Stats source must be chosen and its competition coverage verified. football-data.org documents match/competition APIs but free access is limited by tier and competition.
-- The Poisson model is a baseline only: it does not adjust for team strength across leagues, injuries, lineups, red cards, correlated goals, odds margin, or recency weighting. It should not be treated as a proven profitable betting system.
-- Before live use: build a data adapter, validate event matching, store timestamped odds, backtest on historical data, evaluate calibration and closing-line movement, and only then consider daily automated refresh.
+## Neste steg
+1. Test Parse API-nøkkel og se om turneringer/odds kan hentes fra nettleseren.
+2. Test football-data.org-token og konkurransedekning.
+3. Verifiser navn/ID-matching for lag og turneringer.
+4. Flytt nøkler og datahenting til en backend hvis løsningen skal publiseres.
+5. Lagre tidsstemplet odds og evaluer modellens kalibrering og historiske resultater før daglig bruk.
