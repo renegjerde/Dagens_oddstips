@@ -2,13 +2,20 @@
 <html lang="no">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Dagens oddstips – MVP 0.3</title>
+<title>Dagens oddstips – MVP 0.4</title>
 <style>
 :root{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#17211d;background:#f4f6f4}*{box-sizing:border-box}body{margin:0}.wrap{max-width:1180px;margin:auto;padding:22px 15px 44px}.hero{background:#142d25;color:white;padding:25px;border-radius:18px}.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#b9d8c7;font-weight:700}.hero h1{margin:8px 0;font-size:clamp(28px,5vw,40px)}.hero p{max-width:800px;color:#d9e6df;line-height:1.5;margin:0}.notice{margin:14px 0;padding:13px 15px;border-radius:12px;line-height:1.5;background:#fff4d7;border:1px solid #ead69a;font-size:13px}.notice.good{background:#eaf6ed;border-color:#c3e2ca}.layout{display:grid;grid-template-columns:340px 1fr;gap:15px;margin-top:15px}.panel{background:#fff;border:1px solid #e0e7e2;border-radius:15px;padding:17px;min-width:0}.panel h2{font-size:18px;margin:0 0 10px}.panel h3{font-size:14px;margin:15px 0 7px}.panel p,.help{font-size:13px;line-height:1.5;color:#5a6b61}.field{margin:10px 0}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:5px;color:#42564a}.field input,.field select{width:100%;padding:10px;border:1px solid #cbd7cf;border-radius:9px;background:white;color:#17211d;font:inherit;font-size:13px}.btn{border:0;border-radius:9px;background:#1e5a43;color:white;padding:10px 13px;font-weight:700;cursor:pointer;width:100%;margin-top:7px}.btn.secondary{background:#e9f0eb;color:#244a38}.btn:disabled{opacity:.55;cursor:wait}.small{font-size:11px;color:#718078;line-height:1.45}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:13px}.stat{background:#f2f6f3;border-radius:10px;padding:11px}.stat span{font-size:11px;color:#5d6f64;display:block}.stat strong{font-size:23px;display:block;margin-top:4px}.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:12px}th{text-align:left;font-size:10px;color:#607166;text-transform:uppercase;letter-spacing:.04em;background:#f6f8f6}td,th{padding:10px 8px;border-bottom:1px solid #e8ede9;white-space:nowrap}tr:last-child td{border-bottom:0}.match{font-weight:750}.sub{font-size:10px;color:#6c7c72;margin-top:3px}.positive{color:#16704a;font-weight:800}.negative{color:#9b5c20;font-weight:800}.empty{text-align:center;padding:32px 12px;color:#68776d}.empty strong{display:block;color:#243b2e;margin-bottom:7px}.row{display:flex;gap:8px;align-items:center}.between{justify-content:space-between}.pill{display:inline-block;border:1px solid #d4ded8;border-radius:999px;padding:5px 9px;font-size:11px;color:#43574c}.status{font-size:12px;line-height:1.5;color:#4d6155;white-space:pre-wrap;margin-top:8px}.status.error{color:#a13d28}.divider{border:0;border-top:1px solid #e6ece7;margin:16px 0}.footer{font-size:11px;color:#68776d;margin:17px 2px;line-height:1.5}.badge{display:inline-block;border-radius:5px;padding:3px 5px;background:#edf2ee;font-size:10px;color:#506458}@media(max-width:850px){.layout{grid-template-columns:1fr}.panel{padding:14px}.hero{padding:21px}.stat strong{font-size:20px}}
 </style></head>
 <body><div class="wrap">
-<header class="hero"><div class="eyebrow">Nybygg · versjon 0.3</div><h1>Dagens oddstips</h1><p>Fotball · 1X2 · Norsk Tipping-odds med ekstern kampstatistikk. Denne versjonen legger til direkte API-tilkobling som kan testes med egne nøkler.</p></header>
+<header class="hero"><div class="eyebrow">Nybygg · versjon 0.4</div><h1>Dagens oddstips</h1><p>Fotball · 1X2 · Norsk Tipping-odds med ekstern kampstatistikk. Denne versjonen legger til direkte API-tilkobling som kan testes med egne nøkler.</p></header>
 <div class="notice"><strong>Viktig:</strong> Norsk Tipping-odds hentes her via en uavhengig tredjepartstjeneste, ikke et offisielt Norsk Tipping-API. Du må oppgi din egen API-nøkkel. En lokal Node-server videresender forespørsler og holder API-nøklene utenfor nettleseren.</div>
+<div class="panel" style="margin-top:15px">
+<h2>Backend-tilkobling</h2>
+<p>Hvis appen er publisert på GitHub Pages, må API-serveren kjøre separat. Oppgi adressen til den serveren nedenfor. Ved lokal kjøring bruker du standardadressen.</p>
+<div class="field"><label for="backendUrl">Backend URL</label><input id="backendUrl" type="url" value="" placeholder="http://localhost:3000"></div>
+<button class="btn secondary" id="saveBackend">Bruk backend-adresse</button>
+<div class="small">GitHub Pages kan bare servere statiske filer; den kjører ikke Node-serveren i ZIP-filen.</div>
+</div>
 <div class="layout">
 <aside class="panel">
 <h2>1. Koble til odds</h2>
@@ -40,15 +47,18 @@
 <div id="results"><div class="empty"><strong>Ingen kamper lastet</strong>Koble til oddsleverandøren, eller last inn demo-data for å teste grensesnittet.</div></div>
 <div class="footer">Statistikkattribusjon ved bruk av football-data.org: «Data provided by football-data.org». Denne prototypen lagrer ikke API-nøkler eller historikk permanent.</div>
 </main></div>
-<div class="footer">MVP 0.3 · Ingen innsatser plasseres. Modellen er en enkel baseline, ikke en dokumentert lønnsom strategi. Historisk avkastning må testes før tipsene vurderes som pålitelige.</div>
+<div class="footer">MVP 0.4 · Ingen innsatser plasseres. Modellen er en enkel baseline, ikke en dokumentert lønnsom strategi. Historisk avkastning må testes før tipsene vurderes som pålitelige.</div>
 </div>
 <script>
 const $=id=>document.getElementById(id);
 let tournaments=[], oddsMatches=[], historicalMatches=[], analyzed=[], isDemo=false;
-fetch('/api/health').then(r=>r.json()).then(d=>setStatus('mainStatus',`Server tilkoblet. Odds-nøkkel: ${d.parseConfigured?'konfigurert':'mangler'}; statistikk-token: ${d.statsConfigured?'konfigurert':'mangler'}.`)).catch(()=>setStatus('mainStatus','Server ikke tilgjengelig. Start Node-serveren med npm start.',true));
+fetch('/api/health').then(r=>r.json()).then(d=>setStatus('mainStatus',`Server tilkoblet. Odds-nøkkel: ${d.parseConfigured?'konfigurert':'mangler'}; statistikk-token: ${d.statsConfigured?'konfigurert':'mangler'}.`)).catch(()=>setStatus('mainStatus','Ingen API-server på samme adresse. Hvis denne siden ligger på GitHub Pages, må Node-serveren hostes separat og backend-URL fylles inn ovenfor.',true));
 const parseBase='/api/odds/';
 function setStatus(id,msg,error=false){$(id).textContent=msg;$(id).classList.toggle('error',error)}
-async function fetchJSON(url,headers){const r=await fetch(url,{headers});const txt=await r.text();let data;try{data=JSON.parse(txt)}catch{throw Error('Uventet svar fra API (HTTP '+r.status+').')}if(!r.ok)throw Error(data.message||data.error||('HTTP '+r.status));return data}
+let backendBase='';
+function resolveUrl(url){if(!url.startsWith('/api/'))return url;const base=($('backendUrl')?.value||'').trim().replace(/\\/$/,'');return base?base+url:url}
+$('saveBackend')?.addEventListener('click',()=>{backendBase=($('backendUrl').value||'').trim().replace(/\\/$/,'');setStatus('mainStatus',backendBase?`Backend-adresse satt til ${backendBase}. Kontroller at serveren er publisert og tillater forespørsler fra denne nettsiden.`:'Bruker samme origin. Dette fungerer bare hvis frontend og Node-server kjører på samme adresse.');});
+async function fetchJSON(url,headers){const finalUrl=resolveUrl(url);let r;try{r=await fetch(finalUrl,{headers})}catch(e){throw Error('Får ikke kontakt med backend ('+finalUrl+'). Hvis appen kjører på GitHub Pages, må Node-serveren publiseres separat og backend-URL fylles inn.')}const txt=await r.text();let data;try{data=JSON.parse(txt)}catch{throw Error('Uventet svar fra '+finalUrl+' (HTTP '+r.status+'). Dette kan være GitHub Pages sin 404-side, ikke et API-svar.')}if(!r.ok)throw Error(data.message||data.error||('HTTP '+r.status+' fra '+finalUrl));return data}
 function unwrap(data){return data?.data??data?.result??data}
 function teamName(m,side){return m?.[side+'_team']?.name??m?.[side+'_team']??m?.[side]?.name??m?.[side]??''}
 function norm(s){return String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\b(fc|cf|sc|afc|club|united|city)\b/g,'').replace(/[^a-z0-9]/g,'')}

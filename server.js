@@ -4,7 +4,7 @@ import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = fileURLToPath(new URL(".", import.meta.url));
-const PORT = Number(process.env.PORT || 3000);
+const PORT = Number(process.env.PORT || 3000);\nconst ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "";
 const PARSE_KEY = process.env.PARSE_API_KEY || "";
 const FOOTBALL_TOKEN = process.env.FOOTBALL_DATA_TOKEN || "";
 const PARSE_BASE = "https://api.parse.bot/scraper/87082f99-8f94-45ae-88e4-fff8a25af1d5/";

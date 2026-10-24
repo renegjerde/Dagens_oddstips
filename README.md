@@ -1,38 +1,27 @@
-# Dagens oddstips — MVP v0.3
+# Dagens oddstips — MVP v0.4
 
-Ny, separat prototype for fotball og 1X2. Ingen tidligere prosjektkode er gjenbrukt.
+Versjon 0.4 forbedrer tilkoblingsfeil og støtter frontend på GitHub Pages med separat backend-URL.
 
-## Hva er nytt
-- Node.js-backend som videresender odds- og statistikkforespørsler.
-- API-nøkler ligger server-side i `.env`, ikke i nettleseren.
-- Enkle 60-sekunders cachede svar for å unngå unødvendige API-kall.
-- Validering av parametere og tidsavbrudd på API-kall.
-- Fortsatt støtte for Poisson-baseline, demo-data og CSV-eksport.
+## Viktig: GitHub Pages kjører ikke Node.js
+Hvis du publiserer `index.html` på `renegjerde.github.io`, er det bare statiske filer som blir servert. Node-serveren i `server.js` kjører ikke på GitHub Pages. Derfor gir `/api/odds/tournaments` 404 når frontend prøver å kontakte en API-rute på GitHub Pages.
 
-## Kjør lokalt
-Krever Node.js 20.6 eller nyere.
+## Lokal kjøring
+1. Installer Node.js 20.6 eller nyere.
+2. Kopier `.env.example` til `.env` og legg inn `PARSE_API_KEY` og `FOOTBALL_DATA_TOKEN`.
+3. Kjør `npm start` i denne mappen.
+4. Åpne http://localhost:3000. Backend-URL-feltet kan stå tomt.
 
-1. Pakk ut `oddstips_mvp_v03.zip`.
-2. Kopier `.env.example` til `.env`.
-3. Legg inn egne nøkler i `.env`:
-   - `PARSE_API_KEY` fra Parse sin Norsk Tipping-integrasjon.
-   - `FOOTBALL_DATA_TOKEN` fra football-data.org.
-4. Åpne terminal i prosjektmappen og kjør `npm install` (ingen eksterne pakker brukes, men kommandoen er ufarlig).
-5. Kjør `npm start`.
-6. Åpne `http://localhost:3000`.
+## Publisering
+1. Host `server.js` på en Node-kompatibel tjeneste (for eksempel Render eller Railway) og sett miljøvariablene i hostens private settings.
+2. Bruk HTTPS og sett tilgangskontroll/rate limiting før offentlig bruk.
+3. Åpne frontend på GitHub Pages og fyll inn backendens offentlige HTTPS-URL i «Backend URL».
+4. Backend må tillate CORS fra GitHub Pages-origin. Den medfølgende serveren er et lokalt utgangspunkt og trenger CORS-konfigurasjon før separat frontend kan kalle den fra nettleseren.
 
-Ikke åpne `index.html` direkte i filsystemet; den bruker `/api/...`-endepunkter på den lokale serveren.
+## API-kilder
+- Odds: Parse sin uoffisielle Norsk Tipping-integrasjon.
+- Statistikk: football-data.org.
 
-## Datakilder og begrensninger
-- Odds: Parse sin tredjepartsintegrasjon for Norsk Tipping Oddsen, ikke et offisielt Norsk Tipping API. https://parse.bot/marketplace/7caef9ed-2972-47a8-bc1c-571e0efd9bc2/norsk-tipping-no-api
-- Statistikk: football-data.org API. https://www.football-data.org/documentation/api
-- Tilgang, vilkår, konkurransedekning, kostnader og faktiske svar må verifiseres med brukerens nøkler.
-- Den lokale serveren beskytter nøkler fra nettleseren, men er ikke en produksjonsserver for offentlig eksponering. Ikke åpne porten mot internett uten tilgangskontroll, HTTPS og rate limiting.
-- Lagmatching er omtrentlig. Modellen analyserer kun lag som finnes i statistikkmaterialet som er lastet inn. Odds fra mange internasjonale turneringer kan ikke matches automatisk til en annen konkurranses historikk.
-- Poisson-beregningen er en enkel baseline, ikke et dokumentert lønnsomt system. Den modellerer mål ut fra enkel gjennomsnittsstatistikk; den tar ikke høyde for alle relevante faktorer. Test kalibrering og historisk avkastning før du stoler på tips.
-- Demo-data er oppdiktet.
-
-## Feilsøking
-- `/api/health` viser om begge nøkler er konfigurert.
-- Hvis odds-kall feiler, kontroller Parse-nøkkel, API-tilgang, kreditter og leverandørens responsformat.
-- Hvis statistikk-kall feiler, kontroller token og om konkurransen er tilgjengelig på abonnementet.
+## Begrensninger
+- API-tilgang og responsformat må verifiseres med gyldige nøkler.
+- Kampmatching og Poisson-modellen er foreløpige; ingen lønnsomhet er dokumentert.
+- Ikke legg API-nøkler i frontend eller i et offentlig GitHub-repository.
